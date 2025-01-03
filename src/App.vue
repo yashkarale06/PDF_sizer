@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <div class="container">
       <div class="header">
-        <h1>PDF Compressor</h1>
+        <h1>PDF Sizer</h1>
         <p>Easily compress your PDF files without losing quality</p>
       </div>
 
