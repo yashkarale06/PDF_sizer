@@ -112,22 +112,21 @@ const compressFile = () => {
 const downloadFile = () => {
   if (!file.value) return;
 
-  // Create blob from the original file instead of simulated content
-  const blob = new Blob([file.value], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
+  // Simulate a compressed PDF file (in reality, you should have your compression logic here)
+  const compressedBlob = new Blob(["Simulated compressed file content"], {
+    type: "application/pdf",
+  });
 
-  // For mobile compatibility
-  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-    window.open(url, '_blank');
-  } else {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `compressed_${file.value.name}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
+  const url = URL.createObjectURL(compressedBlob);
 
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "compressed.pdf"; // Make sure the file name is correct
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // Revoke the object URL after download to release memory
   URL.revokeObjectURL(url);
 };
 
