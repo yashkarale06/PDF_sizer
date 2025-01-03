@@ -112,17 +112,21 @@ const compressFile = () => {
 const downloadFile = () => {
   if (!file.value) return;
 
-  const blob = new Blob(["Simulated compressed file content"], {
-    type: "application/pdf",
-  });
+  // Create blob from the original file instead of simulated content
+  const blob = new Blob([file.value], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "compressed.pdf";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  // For mobile compatibility
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    window.open(url, '_blank');
+  } else {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `compressed_${file.value.name}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
   URL.revokeObjectURL(url);
 };
