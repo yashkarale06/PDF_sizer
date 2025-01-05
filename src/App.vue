@@ -87,7 +87,6 @@ const compressedSize = ref(null);
 const compressionLevel = ref('medium');
 const compressedPdfBlob = ref(null);
 
-// Updated compression settings with PDF-specific parameters
 const compressionSettings = {
   low: {
     useObjectStreams: true,
@@ -154,35 +153,26 @@ const compressFile = async () => {
     isCompressing.value = true;
     successMessage.value = false;
 
-    // Read the PDF file
     const arrayBuffer = await file.value.arrayBuffer();
     
-    // Load the PDF document
     const pdfDoc = await PDFDocument.load(arrayBuffer);
 
-    // Get compression settings based on selected level
     const settings = compressionSettings[compressionLevel.value];
 
-    // Copy pages to a new document with compression
     const compressedPdf = await PDFDocument.create();
     
-    // Copy each page with compression
     const pages = await compressedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
     pages.forEach(page => compressedPdf.addPage(page));
 
-    // Apply compression and save
     const compressedBytes = await compressedPdf.save({
       useObjectStreams: settings.useObjectStreams,
       objectsPerTick: settings.objectsPerTick,
       updateMetadata: false,
       addDefaultPage: false,
-      // Compress images if present
       fullyCompressImages: settings.compression.imageCompression,
-      // Set image quality
       imageQuality: settings.compression.imageQuality
     });
 
-    // Create blob from compressed PDF
     compressedPdfBlob.value = new Blob([compressedBytes], { type: 'application/pdf' });
     compressedSize.value = compressedPdfBlob.value.size;
     
